@@ -33,11 +33,13 @@ struct CoinRowView: View {
 
 #Preview {
     CoinRowView(
-        viewModel: .init(
-            ticker: "BTC-KRW",
+        viewModel: CoinRowViewModel(
+            ticker: "BTC",
             fullName: "Bitcoin",
-            tradePrice: 149864000,
-            changeRate: 0.0233295
+            tradePrice: 149_865_000,
+            highPrice: 152_300_000,
+            lowPrice: 147_200_000,
+            changeRate: 0.0285555
         )
     )
 }
