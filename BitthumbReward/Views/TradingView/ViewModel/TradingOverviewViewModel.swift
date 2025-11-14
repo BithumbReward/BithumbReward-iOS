@@ -1,13 +1,13 @@
 //
-//  CoinRowViewModel.swift
+//  TradingOverviewViewModel.swift
 //  BitthumbReward
 //
 //  Created by 김건우 on 11/14/25.
 //
 
-import Foundation
+import SwiftUI
 
-struct CoinRowViewModel: Identifiable {
+struct TradingOverviewViewModel {
     ///
     let ticker: String
     ///
@@ -21,8 +21,6 @@ struct CoinRowViewModel: Identifiable {
     ///
     let changeRate: Double
     
-    var id: String { ticker }
-    
     ///
     var formattedChangeRate: String {
         let formatted = changeRate.formatted(.percent.precision(.fractionLength(2)))
@@ -30,5 +28,15 @@ struct CoinRowViewModel: Identifiable {
     }
 }
 
-extension CoinRowViewModel: Hashable {
+
+extension TradingOverviewViewModel {
+    
+    static let mock: Self = .init(
+        ticker: "BTC-KRW",
+        fullName: "Bitcoin",
+        tradePrice: 149322000,
+        highPrice: 198323000,
+        lowPrice: 73492390,
+        changeRate: 0.0012345
+    )
 }

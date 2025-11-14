@@ -60,19 +60,25 @@ struct CoinListView: View {
                         CoinRowViewModel(
                             ticker: "BTC",
                             fullName: "Bitcoin",
-                            tradePrice: 149865000,
+                            tradePrice: 149_865_000,
+                            highPrice: 152_300_000,
+                            lowPrice: 147_200_000,
                             changeRate: 0.0285555
                         ),
                         CoinRowViewModel(
                             ticker: "DOG",
                             fullName: "Dogecoin",
-                            tradePrice: 67445344,
+                            tradePrice: 67_445_344,
+                            highPrice: 70_100_000,
+                            lowPrice: 65_900_000,
                             changeRate: 0.123525
                         ),
                         CoinRowViewModel(
                             ticker: "ETH",
                             fullName: "Ethereum",
-                            tradePrice: 53424444,
+                            tradePrice: 53_424_444,
+                            highPrice: 55_200_000,
+                            lowPrice: 51_800_000,
                             changeRate: 0.412923
                         )
                     ]
