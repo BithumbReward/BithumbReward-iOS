@@ -10,11 +10,19 @@ import Testing
 
 struct BitthumbRewardTests {
 
-    @Test func example() async throws {
+    @Test func market() async throws {
         let client = BithumbClient(session: .shared)
         
         let markets = try await client.markets()
         
         #expect(markets.count > 0)
+    }
+    
+    @Test func account() async throws {
+        let client = BithumbClient(session: .shared)
+        
+        let account = try await client.account()
+        
+        #expect(account.isEmpty == true)
     }
 }
