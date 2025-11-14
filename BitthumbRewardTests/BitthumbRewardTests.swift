@@ -11,8 +11,10 @@ import Testing
 struct BitthumbRewardTests {
 
     @Test func example() async throws {
-        let result = JWT.generateJWT(accessKey: "1234", secretKey: "1234", query: ["number": "123"])
-        #expect(<#T##condition: Bool##Bool#>)
+        let client = BithumbClient(session: .shared)
+        
+        let markets = try await client.markets()
+        
+        #expect(markets.count > 0)
     }
-
 }
