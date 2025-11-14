@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Environment {
+enum AppConfiguration {
     static var baseURL: URL {
         guard let baseURLString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
               let url = URL(string: baseURLString)

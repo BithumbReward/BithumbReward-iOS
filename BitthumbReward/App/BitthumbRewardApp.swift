@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct BitthumbRewardApp: App {
+    @State private var clViewModel = CoinListViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(clViewModel)
         }
     }
 }

@@ -8,25 +8,20 @@
 import SwiftUI
 
 struct TradingView: View {
-    @State private var active = true
+    var coin: CoinRowViewModel
     
     var body: some View {
-        NavigationStack {
-            Text("TradingView")
-                .offset(y: 100)
-        }
-        .loadingIndicator(active: active)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                active = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    active = true
-                }
-            }
-        }
+        Text("TradingView")
     }
 }
 
 #Preview {
-    TradingView()
+    TradingView(
+        coin: .init(
+            ticker: "BTC-KRW",
+            fullName: "Bitcoin",
+            tradePrice: 149864000,
+            changeRate: 0.0233295
+        )
+    )
 }

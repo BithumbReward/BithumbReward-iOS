@@ -15,7 +15,7 @@ struct ContentView: View {
             }
             
             Tab("주문", systemImage: "chart.line.uptrend.xyaxis") {
-                TradingView()
+                CoinListView()
             }
             
             Tab("기록", systemImage: "clock.fill") {
