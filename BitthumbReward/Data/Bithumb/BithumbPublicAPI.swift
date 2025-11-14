@@ -17,7 +17,7 @@ enum BithumbPublicAPI {
 
 extension BithumbPublicAPI: Endpoint {
     var baseURL: String {
-        Environment.baseURL.absoluteString
+        AppConfiguration.baseURL.absoluteString
     }
     
     var method: HTTPMethod {
