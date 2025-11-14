@@ -14,7 +14,7 @@ enum BithumbPrivateAPI {
     case order(OrderRequest)
     
     /// 주문 리스트 조회
-    case orders(OrderFetchRequest)
+    case orderList(OrderFetchRequest)
     
     /// 자산 현황
     case accounts
@@ -28,23 +28,22 @@ extension BithumbPrivateAPI: Endpoint {
     var method: HTTPMethod {
         switch self {
         case .order: .post
-        case .accounts, .orders: .get
+        case .accounts, .orderList: .get
         }
     }
     
     var path: String {
         switch self {
-        case .order, .orders: return "orders"
+        case .order, .orderList: return "orders"
         case .accounts: return "accounts"
         }
     }
     
     var queries: [URLQueryItem]? {
         switch self {
-        case .order(let orderRequest): return nil
-            
-        case .orders(let orderFetchRequest):
-            var items: [URLQueryItem] = [
+        case .order: return nil
+        case .orderList(let orderFetchRequest):
+            let items: [URLQueryItem] = [
                 .init(name: "market", value: orderFetchRequest.market),
                 .init(name: "state", value: orderFetchRequest.state),
                 .init(name: "page", value: "\(orderFetchRequest.page)"),
@@ -64,7 +63,7 @@ extension BithumbPrivateAPI: Endpoint {
     var body: (any Encodable)? {
         switch self {
         case .order(let orderRequest): return orderRequest
-        case .orders: return nil
+        case .orderList: return nil
         case .accounts: return nil
         }
     }
