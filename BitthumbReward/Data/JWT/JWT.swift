@@ -9,11 +9,8 @@ import Foundation
 import CryptoKit
 
 enum JWT {
-    static func generateJWT(accessKey: String, secretKey: String, query: [String: Any]) throws -> String {
-        let queryString = query.map { "\($0.key)=\($0.value)" }
-            .joined(separator: "&")
-        
-        let queryData = Data(queryString.utf8)
+    static func generate(accessKey: String, secretKey: String, query: String) throws -> String {
+        let queryData = Data(query.utf8)
         let queryHash = SHA512.hash(data: queryData)
         let queryHashHex = queryHash.map { String(format: "%02x", $0) }.joined()
         
