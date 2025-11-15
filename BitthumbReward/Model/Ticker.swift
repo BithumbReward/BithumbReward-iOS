@@ -5,24 +5,37 @@
 //  Created by kangho on 11/13/25.
 //
 
+// MARK: - Ticker
+
 import Foundation
 
-// MARK: - Ticker
 struct Ticker: Codable {
-    let market, tradeDate, tradeTime, tradeDateKst: String
+    let market: String
+    let tradeDate: String
+    let tradeTime: String
+    let tradeDateKst: String
     let tradeTimeKst: String
-    let tradeTimestamp, openingPrice, highPrice, lowPrice: Int
-    let tradePrice, prevClosingPrice: Int
+    let tradeTimestamp: Int
+    let openingPrice: Double
+    let highPrice: Double
+    let lowPrice: Double
+    let tradePrice: Double
+    let prevClosingPrice: Double
     let change: String
-    let changePrice: Int
+    let changePrice: Double
     let changeRate: Double
-    let signedChangePrice: Int
-    let signedChangeRate, tradeVolume, accTradePrice, accTradePrice24H: Double
-    let accTradeVolume, accTradeVolume24H: Double
-    let highest52_WeekPrice: Int
-    let highest52_WeekDate: String
-    let lowest52_WeekPrice: Int
-    let lowest52_WeekDate: String
+    let signedChangePrice: Double
+    let signedChangeRate: Double
+    let tradeVolume: Double
+    let accTradePrice: Double
+    let accTradePrice24H: Double
+    let accTradeVolume: Double
+    let accTradeVolume24H: Double
+    let highest52WeekPrice: Double
+    let highest52WeekDate: String
+    let lowest52WeekPrice: Double
+    let lowest52WeekDate: String
+    
     let timestamp: Int
 
     enum CodingKeys: String, CodingKey {
@@ -47,10 +60,10 @@ struct Ticker: Codable {
         case accTradePrice24H = "acc_trade_price_24h"
         case accTradeVolume = "acc_trade_volume"
         case accTradeVolume24H = "acc_trade_volume_24h"
-        case highest52_WeekPrice = "highest_52_week_price"
-        case highest52_WeekDate = "highest_52_week_date"
-        case lowest52_WeekPrice = "lowest_52_week_price"
-        case lowest52_WeekDate = "lowest_52_week_date"
+        case highest52WeekPrice = "highest_52_week_price"
+        case highest52WeekDate = "highest_52_week_date"
+        case lowest52WeekPrice = "lowest_52_week_price"
+        case lowest52WeekDate = "lowest_52_week_date"
         case timestamp
     }
 }

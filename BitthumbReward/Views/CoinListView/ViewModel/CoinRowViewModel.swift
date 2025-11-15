@@ -13,11 +13,11 @@ struct CoinRowViewModel: Identifiable {
     ///
     let fullName: String
     ///
-    let tradePrice: Int
+    let tradePrice: Double
     ///
-    let highPrice: Int
+    let highPrice: Double
     ///
-    let lowPrice: Int
+    let lowPrice: Double
     ///
     let changeRate: Double
     

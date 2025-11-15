@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct TradingOverviewView: View {
+    var fullName: String
     var ovViewModel: TradingOverviewViewModel
     
     let padding: CGFloat = 12
     
+    init(
+        _ fullName: String,
+        ovViewModel: TradingOverviewViewModel
+    ) {
+        self.fullName = fullName
+        self.ovViewModel = ovViewModel
+    }
+    
     var body: some View {
         VStack(spacing: 20) {
             HStack {
-                Text(ovViewModel.fullName)
+                Text(fullName)
                     .fontWeight(.bold)
                 Text("( \(ovViewModel.ticker) )")
                     .foregroundStyle(.secondary)
@@ -74,9 +83,9 @@ struct TradingOverviewView: View {
 
 #Preview {
     TradingOverviewView(
+        "Bitcoin",
         ovViewModel: .init(
             ticker: "BTC-KRW",
-            fullName: "Bitcoin",
             tradePrice: 149322000,
             highPrice: 198323000,
             lowPrice: 73492390,

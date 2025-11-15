@@ -11,13 +11,11 @@ struct TradingOverviewViewModel {
     ///
     let ticker: String
     ///
-    let fullName: String
+    let tradePrice: Double
     ///
-    let tradePrice: Int
+    let highPrice: Double
     ///
-    let highPrice: Int
-    ///
-    let lowPrice: Int
+    let lowPrice: Double
     ///
     let changeRate: Double
     
@@ -33,7 +31,6 @@ extension TradingOverviewViewModel {
     
     static let mock: Self = .init(
         ticker: "BTC-KRW",
-        fullName: "Bitcoin",
         tradePrice: 149322000,
         highPrice: 198323000,
         lowPrice: 73492390,
