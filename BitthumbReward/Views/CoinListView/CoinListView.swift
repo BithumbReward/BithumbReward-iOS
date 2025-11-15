@@ -11,27 +11,45 @@ struct CoinListView: View {
     @Environment(CoinListViewModel.self) var clViewModel
     
     var body: some View {
-        Group {
-            if !clViewModel.listOfCoins.isEmpty {
-                listOfCoinsView
-            } else {
-                contentUnavailableView
+        @Bindable var vm = clViewModel
+        NavigationStack {
+            Group {
+                if !clViewModel.listOfMarkets.isEmpty {
+                    listOfCoinsView
+                } else {
+                    contentUnavailableView
+                }
+            }
+            .background(.bithumbBackground)
+            .navigationTitle("코인 목록")
+        }
+        .task {
+            do {
+                try await clViewModel.fetchAvailableMarkets()
+            } catch {
+                clViewModel.showWarningAlert = true
             }
         }
-        .navigationTitle("코인 목록")
-        .navigationBarTitleDisplayMode(.inline)
-        .background(.bithumbBackground)
+        .alert(
+            "코인 목록 불러오기 실패",
+            isPresented: $vm.showWarningAlert
+        ) {
+            Button("확인") { }
+        } message: {
+            Text("코인 목록을 불러올 수 없습니다. 잠시 후 다시 시도해주세요.")
+        }
+        
     }
     
     private var listOfCoinsView: some View {
-        List(clViewModel.listOfCoins) { coin in
-            NavigationLink(value: coin) { [vm = coin] in
-                CoinRowView(viewModel: vm)
+        List(clViewModel.listOfMarkets) { coin in
+            NavigationLink {
+                TradingView(coin: coin)
+            } label: {
+                CoinRowView(viewModel: coin)
             }
         }
-        .navigationDestination(for: CoinRowViewModel.self) { coin in
-            TradingView(coin: coin)
-        }
+        .listRowBackground(Color.white)
         .scrollContentBackground(.hidden)
     }
     
@@ -56,7 +74,7 @@ struct CoinListView: View {
         CoinListView()
             .environment(
                 CoinListViewModel(
-                    listOfCoins: [
+                    listOfMarkets: [
                         CoinRowViewModel(
                             ticker: "BTC",
                             fullName: "Bitcoin",

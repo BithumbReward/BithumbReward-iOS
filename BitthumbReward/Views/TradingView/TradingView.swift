@@ -8,27 +8,32 @@
 import SwiftUI
 
 struct TradingView: View {
-    
-    // 뷰모델로 빼기
-    @State private var btnType: BuyAndSellButton.`Type` = .buy
-    
     @Environment(TradingViewModel.self) var trViewModel
     
     var coin: CoinRowViewModel
     
     var body: some View {
+        @Bindable var vm = trViewModel
+        
         VStack(spacing: 16) {
             Group {
                 if let ovViewModel = trViewModel.overview {
-                    TradingOverviewView(ovViewModel: ovViewModel)
+                    TradingOverviewView(
+                        coin.fullName,
+                        ovViewModel: ovViewModel
+                    )
                 } else {
-                    TradingOverviewView(ovViewModel: .mock)
+                    TradingOverviewView(
+                        coin.fullName,
+                        ovViewModel: .mock
+                    )
+                    .shimmering(active: true)
                 }
             }
             .padding(.top)
             
             VStack {
-                BuyAndSellButton(type: $btnType)
+                BuyAndSellButton(type: $vm.tradeType)
                 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(trViewModel.purchasableCoin)
@@ -37,7 +42,6 @@ struct TradingView: View {
                     Text(coin.fullName)
                 }
                 
-                @Bindable var vm = trViewModel
                 TextField("거래 금액을 입력하세요.", text: $vm.tradeAmount)
                     .font(.title)
                     .textFieldStyle(.plain)
@@ -63,13 +67,13 @@ struct TradingView: View {
                 
             } label: {
                 // 버튼 타입에 따라 UI 달리하기
-                Text("매수하기")
+                Text(vm.tradeType == .buy ? "매수하기" : "매도하기")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundStyle(.background)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(.bithumbOrange)
+                    .background(vm.tradeType == .buy ?  .bithumbOrange : .blue)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.horizontal)
             }
