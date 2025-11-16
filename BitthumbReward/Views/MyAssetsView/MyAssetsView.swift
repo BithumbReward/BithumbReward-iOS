@@ -32,10 +32,13 @@ struct MyAssetsView: View {
                 }
             }
             .ignoresSafeArea(edges: .top)
+            .background(.bithumbBackground)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .background(.bithumbBackground)
+        .navigationDestination(for: String.self, destination: { market in
+            TradeHistoryView(coin: market)
+        })
         .task(id: viewModel.totalBalance) {
             await viewModel.fetch()
         }
@@ -48,7 +51,10 @@ extension MyAssetsView {
         VStack(spacing: 0) {
             Section {
                 ForEach(viewModel.assetRows) { vm in
-                    AccountRow(viewModel: vm)
+                    NavigationLink(value: vm.id) {
+                        AccountRow(viewModel: vm)
+                    }
+                    .buttonStyle(.plain)
                 }
             } header: {
                 HStack {

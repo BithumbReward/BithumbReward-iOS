@@ -30,7 +30,6 @@ struct HistoryView<Content: View>: View {
     
     var body: some View {
         @Bindable var vm = viewModel
-        NavigationStack {
             Group {
                 if !filteredMarketList.isEmpty {
                     listOfCoinsView
@@ -41,7 +40,6 @@ struct HistoryView<Content: View>: View {
             .background(.bithumbBackground)
             .navigationTitle("주문 거래서 목록")
             .searchable(text: $keyword)
-        }
         .task {
             do {
                 try await viewModel.fetchAvailableMarkets()
@@ -62,7 +60,7 @@ struct HistoryView<Content: View>: View {
     private var listOfCoinsView: some View {
         List(filteredMarketList) { market in
             NavigationLink {
-                content("KRW-BTC")
+                content(market.ticker)
             } label: {
                 MarketRowView(market: market)
             }

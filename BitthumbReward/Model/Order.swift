@@ -9,8 +9,11 @@ import Foundation
 
 // MARK: - Order
 struct Order: Codable {
-    let uuid, side, ordType, price: String
-    let state, market: String
+    let uuid, price: String
+    let side: Side
+    let ordType: OrderType
+    let market: String
+    let state: OrderState
     let createdAt: Date
     let volume, remainingVolume, reservedFee, remainingFee: String
     let paidFee, locked, executedVolume: String
@@ -36,10 +39,10 @@ extension Order {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.uuid = try container.decode(String.self, forKey: .uuid)
-        self.side = try container.decode(String.self, forKey: .side)
-        self.ordType = try container.decode(String.self, forKey: .ordType)
+        self.side = try container.decode(Side.self, forKey: .side)
+        self.ordType = try container.decode(OrderType.self, forKey: .ordType)
         self.price = try container.decode(String.self, forKey: .price)
-        self.state = try container.decode(String.self, forKey: .state)
+        self.state = try container.decode(OrderState.self, forKey: .state)
         self.market = try container.decode(String.self, forKey: .market)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.volume = try container.decodeIfPresent(String.self, forKey: .volume) ?? "-"
@@ -77,10 +80,10 @@ extension Order {
     
     private init() {
         self.uuid = "C0101000000001799653"
-        self.side = "bid"
-        self.ordType = "limit"
+        self.side = .bid
+        self.ordType = .limit
         self.price = "84000000"
-        self.state = "wait"
+        self.state = .wait
         self.market = "KRW-BTC"
         self.createdAt = Date()
         self.volume = "0.0001"

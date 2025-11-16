@@ -51,11 +51,7 @@ extension BithumbPrivateAPI: Endpoint {
                 .init(name: "order", value: "\(orderFetchRequest.orderBy.description)"),
             ]
             
-            let uuids = orderFetchRequest.uuids.map {
-                URLQueryItem(name: "uuid[]", value: $0)
-            }
-            
-            return items + uuids
+            return items
         case .accounts: return nil
         }
     }
