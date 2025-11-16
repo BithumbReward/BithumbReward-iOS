@@ -7,31 +7,54 @@
 
 import SwiftUI
 
-struct HistoryView: View {
+struct HistoryView<Content: View>: View {
     @Environment(CoinListViewModel.self) var clViewModel
     
+    var content: (String) -> Content
+    
+    init(@ViewBuilder content: @escaping (String) -> Content) {
+        self.content = content
+    }
+    
     var body: some View {
-        Group {
-            if !clViewModel.listOfCoins.isEmpty {
-                listOfCoinsView
-            } else {
-                contentUnavailableView
+        @Bindable var vm = clViewModel
+        NavigationStack {
+            Group {
+                if !clViewModel.listOfMarkets.isEmpty {
+                    listOfCoinsView
+                } else {
+                    contentUnavailableView
+                }
+            }
+            .background(.bithumbBackground)
+            .navigationTitle("주문 거래서 목록")
+        }
+        .task {
+            do {
+                try await clViewModel.fetchAvailableMarkets()
+            } catch {
+                clViewModel.showWarningAlert = true
             }
         }
-        .navigationTitle("코인 목록")
-        .navigationBarTitleDisplayMode(.inline)
-        .background(.bithumbBackground)
+        .alert(
+            "코인 목록 불러오기 실패",
+            isPresented: $vm.showWarningAlert
+        ) {
+            Button("확인") { }
+        } message: {
+            Text("코인 목록을 불러올 수 없습니다. 잠시 후 다시 시도해주세요.")
+        }
     }
     
     private var listOfCoinsView: some View {
-        List(clViewModel.listOfCoins) { coin in
-            NavigationLink(value: coin) { [vm = coin] in
-                CoinRowView(viewModel: vm)
+        List(clViewModel.listOfMarkets) { coin in
+            NavigationLink {
+                content("BTC")
+            } label: {
+                CoinRowView(viewModel: coin)
             }
         }
-        .navigationDestination(for: CoinRowViewModel.self) { coin in
-            EmptyView()
-        }
+        .listRowBackground(Color.white)
         .scrollContentBackground(.hidden)
     }
     
@@ -45,5 +68,7 @@ struct HistoryView: View {
 }
 
 #Preview {
-    HistoryView()
+    HistoryView { coin in
+        TradeHistoryView(coin: coin)
+    }
 }

@@ -19,7 +19,9 @@ struct ContentView: View {
             }
             
             Tab("기록", systemImage: "clock.fill") {
-                HistoryView()
+                HistoryView { coin in
+                    TradeHistoryView(coin: coin)
+                }
             }
         }
         .tint(.orange)
