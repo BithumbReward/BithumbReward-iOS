@@ -17,6 +17,23 @@ final class MyAssetsViewModel {
     }
     
     var balance: Double = 0
+    var totalBalance: Double = 0
+    
+    var totalBalanceString: String {
+        let formater = NumberFormatter()
+        formater.numberStyle = .currency
+        formater.locale = Locale(identifier: "ko-kr")
+        
+        return (formater.string(from: NSNumber(value: totalBalance)) ?? "-")
+    }
+    
+    var koreanBalance: String {
+        let formater = NumberFormatter()
+        formater.numberStyle = .currency
+        formater.locale = Locale(identifier: "ko-kr")
+        
+        return (formater.string(from: NSNumber(value: balance)) ?? "-") + " 원"
+    }
     
     func fetch() async {
         do {
@@ -29,7 +46,7 @@ final class MyAssetsViewModel {
             
             balance = Double((accounts.first(where: { $0.currency == "KRW" })?.balance ?? "0")) ?? 0
             
-            assetRows = accounts
+            let zipped = accounts
                 .filter { $0.currency != "KRW" }
                 .compactMap { account in
                     if let ticker = tickers.first(where: { $0.market.split(separator: "-")[1] == account.currency }) {
@@ -38,52 +55,24 @@ final class MyAssetsViewModel {
                         return nil
                     }
                 }
-                .reduce(into: [String: (Account, Ticker)]()) { $0[$1.0.currency] = $1 }.values
+                .reduce(into: [String: (Account, Ticker)]()) { $0[$1.0.currency] = $1 }
+            
+            totalBalance = zipped
+                .mapValues({ a, t in
+                    (Double(a.balance) ?? 0) * t.tradePrice
+                })
+                .values
+                .reduce(0, +)
+            
+            totalBalance += balance
+            
+            assetRows = zipped.values
                 .map { account, ticker in
                     AssetRowViewModel(account: account, ticker: ticker)
                 }
             
             if assetRows.isEmpty {
-                assetRows = [
-                    .init(
-                        account: .init(
-                            currency: "BTC",
-                            balance: "124.45272908",
-                            locked: "0",
-                            avgBuyPrice: "36340973",
-                            avgBuyPriceModified: false,
-                            unitCurrency: "KRW"
-                        ),
-                        ticker: .init(
-                            market: "KRW-BTC",
-                            tradeDate: Date().description,
-                            tradeTime: "",
-                            tradeDateKst: "",
-                            tradeTimeKst: "",
-                            tradeTimestamp: 0,
-                            openingPrice: 0,
-                            highPrice: 0,
-                            lowPrice: 0,
-                            tradePrice: 0,
-                            prevClosingPrice: 0,
-                            change: "",
-                            changePrice: 0,
-                            changeRate: 0,
-                            signedChangePrice: 0,
-                            signedChangeRate: 0,
-                            tradeVolume: 0,
-                            accTradePrice: 0,
-                            accTradePrice24H: 0,
-                            accTradeVolume: 0,
-                            accTradeVolume24H: 0,
-                            highest52WeekPrice: 0,
-                            highest52WeekDate: "",
-                            lowest52WeekPrice: 0,
-                            lowest52WeekDate: "",
-                            timestamp: 0
-                        )
-                    )
-                ]
+                assetRows = [ .preview ]
             }
             
         } catch {
@@ -91,3 +80,4 @@ final class MyAssetsViewModel {
         }
     }
 }
+

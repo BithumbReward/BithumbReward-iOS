@@ -36,7 +36,7 @@ struct MyAssetsView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .background(.bithumbBackground)
-        .task {
+        .task(id: viewModel.totalBalance) {
             await viewModel.fetch()
         }
     }
@@ -65,15 +65,23 @@ extension MyAssetsView {
     
     private var balanceView: some View {
         VStack(spacing: 8) {
-            Text("Total Balance")
+            Text("총 보유자산")
                 .font(.title3)
             HStack(alignment: .lastTextBaseline) {
-                Text(viewModel.balance, format: .currency(code: "KRW"))
+                Text(viewModel.totalBalanceString)
                     .font(.largeTitle)
                     .bold()
                 
-                Text("KOR")
+                Text("원")
             }
+            
+            HStack {
+                Text("보유 원화")
+                
+                Text(viewModel.koreanBalance)
+                Spacer()
+            }
+            .padding(16)
         }
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity)

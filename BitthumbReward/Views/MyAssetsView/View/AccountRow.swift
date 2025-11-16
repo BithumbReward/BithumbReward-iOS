@@ -15,14 +15,22 @@ import SwiftUI
 
 struct AccountRow: View {
     let viewModel: AssetRowViewModel
+    
+    var changeColor: Color {
+        if viewModel.changeRate == 0 {
+            return .secondary
+        }
+        
+        return viewModel.changeRate > 0 ? .blue : .red
+    }
 
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(viewModel.currency)
+                Text(viewModel.name)
                     .fontWeight(.medium)
                 
-                Text(viewModel.balance, format: .percent.precision(.fractionLength(10)))
+                Text(viewModel.balance)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -35,9 +43,14 @@ struct AccountRow: View {
                 
                 Text(viewModel.changeValue)
                     .fontWeight(.medium)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(changeColor)
             }
         }
         .padding(.vertical, 8)
     }
+}
+
+#Preview {
+    AccountRow(viewModel: .preview)
+        .padding()
 }
