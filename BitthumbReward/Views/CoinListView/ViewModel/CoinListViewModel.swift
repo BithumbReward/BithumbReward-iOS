@@ -1,5 +1,5 @@
 //
-//  MarketListViewModel.swift
+//  CoinListViewModel.swift
 //  BitthumbReward
 //
 //  Created by 김건우 on 11/14/25.
@@ -8,16 +8,16 @@
 import SwiftUI
 
 @Observable
-final class MarketListViewModel {
+final class CoinListViewModel {
     
-    var listOfMarkets: [MarketRowViewModel] = []
+    var listOfMarkets: [CoinRowViewModel] = []
     
     var showWarningAlert = false
     var showLoadingIndicator = true
     
     private let bithumbClient = BithumbClient(session: .shared)
     
-    init(listOfMarkets: [MarketRowViewModel] = []) {
+    init(listOfMarkets: [CoinRowViewModel] = []) {
         self.listOfMarkets = listOfMarkets
     }
     
@@ -32,7 +32,7 @@ final class MarketListViewModel {
                 guard let market = markets.first(where: { $0.market == coin.market})
                 else { throw URLError(.unknown) }
                 
-                return MarketRowViewModel(
+                return CoinRowViewModel(
                     ticker: coin.market,
                     fullName: market.englishName,
                     tradePrice: coin.tradePrice,

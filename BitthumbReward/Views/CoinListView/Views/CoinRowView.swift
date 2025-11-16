@@ -1,5 +1,5 @@
 //
-//  MarketRowView.swift
+//  CoinRowView.swift
 //  BitthumbReward
 //
 //  Created by 김건우 on 11/14/25.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct MarketRowView: View {
-    let market: MarketRowViewModel
+struct CoinRowView: View {
+    let viewModel: CoinRowViewModel
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(market.ticker)
-                Text(market.fullName)
+                Text(viewModel.ticker)
+                Text(viewModel.fullName)
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -22,9 +22,9 @@ struct MarketRowView: View {
             Spacer()
             
             VStack(alignment: .trailing) {
-                Text(market.formattedTradePrice)
-                Text(market.formattedChangeRate)
-                    .foregroundStyle(market.changeRate > 0.0 ? Color.red : Color.blue)
+                Text(viewModel.formattedTradePrice)
+                Text(viewModel.formattedChangeRate)
+                    .foregroundStyle(viewModel.changeRate > 0.0 ? Color.red : Color.blue)
             }
             .fontWeight(.medium)
         }
@@ -32,8 +32,8 @@ struct MarketRowView: View {
 }
 
 #Preview {
-    MarketRowView(
-        market: MarketRowViewModel(
+    CoinRowView(
+        viewModel: CoinRowViewModel(
             ticker: "BTC",
             fullName: "Bitcoin",
             tradePrice: 149_865_000,
