@@ -8,36 +8,15 @@
 import SwiftUI
 
 struct AccountRow: View {
-    let account: Account
-    let currentPrice: Double = 1000
-    
-    /// 원화 환산 금액 - balance - current price
-    var balanceKRW: Double {
-//        currentPrice * (Double(account.balance) ?? 0)
-        57698
-    }
-    
-    /// 등락폭 - current ticker / ave buy Price
-    var changeRate: Double {
-        return 0
-    }
-    
-    /// 등락금액 - 등락폭 * balance
-    var changePrice: Double {
-        (Double(account.balance) ?? 0) * changeRate
-    }
-    
-    var changeValue: String {
-        "+11,436(24.7%)"
-    }
-    
+    let viewModel: AssetRowViewModel
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(account.currency)
+                Text(viewModel.currency)
                     .fontWeight(.medium)
                 
-                Text(account.balance)
+                Text(viewModel.balance, format: .percent.precision(.fractionLength(10)))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -45,10 +24,10 @@ struct AccountRow: View {
             Spacer()
             
             VStack(alignment: .trailing) {
-                Text(balanceKRW, format: .currency(code: "KRW"))
+                Text(viewModel.balanceKRW, format: .currency(code: "KRW"))
                     .bold()
                 
-                Text(changeValue)
+                Text(viewModel.changeValue)
                     .fontWeight(.medium)
                     .foregroundStyle(.red)
             }

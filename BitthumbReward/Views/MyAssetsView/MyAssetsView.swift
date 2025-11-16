@@ -8,59 +8,62 @@
 import SwiftUI
 
 struct MyAssetsView: View {
-    @State var accounts: Accounts = .previews
-
-    var balance: Double {
-        Double(accounts.first(where: { $0.currency == "KRW" })?.balance ?? "0") ?? 0
-    }
-    var client = BithumbClient(session: .shared)
+    @Environment(MyAssetsViewModel.self) var viewModel
     
     var body: some View {
-        ScrollView {
-            BalanceView(balance: balance)
+        Group {
+            ScrollView {
+                balanceView
                 
-            VStack(spacing: 0) {
-                Section {
-                    ForEach(accounts) { account in
-                        AccountRow(account: account)
-                    }
-                } header: {
-                    HStack {
-                        Text("보유 종목")
-                            .font(.title3)
-                            .bold()
-                        Spacer()
-                    }
-                    .padding(.vertical, 16)
+                if viewModel.assetRows.isEmpty {
+                    ContentUnavailableView(
+                        "자산 목록을 불러올 수 없어요.",
+                        systemImage: "network.slash",
+                        description: Text("잠시 후 다시 시도해주세요.")
+                    )
+                    .padding(.vertical)
+                } else {
+                    assetList
                 }
-                .padding(.horizontal, 16)
             }
+            .ignoresSafeArea(edges: .top)
         }
-        .ignoresSafeArea(edges: .top)
-        .background(Color.bithumbBackground)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .background(.bithumbBackground)
         .task {
-            do {
-                accounts = try await client.account()
-            } catch {
-                print(error)
-            }
+            await viewModel.fetch()
         }
     }
 }
 
-#Preview {
-    MyAssetsView()
-}
-
-struct BalanceView: View {
-    let balance: Double
+extension MyAssetsView {
     
-    var body: some View {
+    private var assetList: some View {
+        VStack(spacing: 0) {
+            Section {
+                ForEach(viewModel.assetRows) { vm in
+                    AccountRow(viewModel: vm)
+                }
+            } header: {
+                HStack {
+                    Text("보유 종목")
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                }
+                .padding(.vertical, 16)
+            }
+            .padding(.horizontal, 16)
+        }
+    }
+    
+    private var balanceView: some View {
         VStack(spacing: 8) {
             Text("Total Balance")
                 .font(.title3)
             HStack(alignment: .lastTextBaseline) {
-                Text(balance, format: .currency(code: "KRW"))
+                Text(viewModel.balance, format: .currency(code: "KRW"))
                     .font(.largeTitle)
                     .bold()
                 
@@ -78,3 +81,8 @@ struct BalanceView: View {
         }
     }
 }
+
+#Preview {
+    MyAssetsView()
+}
+

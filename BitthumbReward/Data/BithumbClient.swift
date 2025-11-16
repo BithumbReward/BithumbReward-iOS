@@ -56,12 +56,14 @@ extension BithumbClient {
 extension BithumbClient {
     
     private func publicRequest<T: Decodable>(_ endpoint: BithumbPublicAPI) async throws -> T {
-        let builder = RequestBuilder()
-        let request = try builder.build(endpoint)
-        return try await session.send(request) { try JSONDecoder().decode(T.self, from: $0) }
+        return try await send(endpoint)
     }
     
     private func privateRequest<T: Decodable>(_ endpoint: BithumbPrivateAPI) async throws -> T {
+        return try await send(endpoint)
+    }
+    
+    private func send<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         let builder = RequestBuilder()
         let request = try builder.build(endpoint)
         return try await session.send(request) { try JSONDecoder().decode(T.self, from: $0) }
