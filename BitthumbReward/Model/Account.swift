@@ -22,3 +22,9 @@ struct Account: Codable {
 }
 
 typealias Accounts = [Account]
+
+extension Account: Identifiable {
+    var id: String {
+        currency
+    }
+}

@@ -21,4 +21,15 @@ struct OrderRequest: Encodable {
         case price = "price"
         case orderType = "ord_type"
     }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.market, forKey: .market)
+        try container.encode(self.side, forKey: .side)
+        if volume != 0 {
+            try container.encode(self.volume, forKey: .volume)
+        }
+        try container.encode(self.price, forKey: .price)
+        try container.encode(self.orderType, forKey: .orderType)
+    }
 }
