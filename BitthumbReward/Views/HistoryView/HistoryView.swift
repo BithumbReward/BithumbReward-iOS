@@ -9,8 +9,20 @@ import SwiftUI
 
 struct HistoryView<Content: View>: View {
     @State private var viewModel = MarketListViewModel()
+    @State private var keyword: String = ""
     
     var content: (String) -> Content
+    
+    var filteredMarketList: [MarketRowViewModel] {
+        if !keyword.isEmpty {
+            viewModel.listOfMarkets
+                .filter { vm in
+                    vm.fullName.localizedCaseInsensitiveContains(keyword) || vm.ticker.localizedCaseInsensitiveContains(keyword)
+                }
+        } else {
+            viewModel.listOfMarkets
+        }
+    }
     
     init(@ViewBuilder content: @escaping (String) -> Content) {
         self.content = content
@@ -20,7 +32,7 @@ struct HistoryView<Content: View>: View {
         @Bindable var vm = viewModel
         NavigationStack {
             Group {
-                if !viewModel.listOfMarkets.isEmpty {
+                if !filteredMarketList.isEmpty {
                     listOfCoinsView
                 } else {
                     contentUnavailableView
@@ -28,6 +40,7 @@ struct HistoryView<Content: View>: View {
             }
             .background(.bithumbBackground)
             .navigationTitle("주문 거래서 목록")
+            .searchable(text: $keyword)
         }
         .task {
             do {
@@ -47,7 +60,7 @@ struct HistoryView<Content: View>: View {
     }
     
     private var listOfCoinsView: some View {
-        List(viewModel.listOfMarkets) { market in
+        List(filteredMarketList) { market in
             NavigationLink {
                 content("KRW-BTC")
             } label: {
