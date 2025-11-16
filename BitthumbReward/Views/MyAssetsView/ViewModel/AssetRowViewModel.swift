@@ -9,13 +9,15 @@ import Foundation
 
 struct AssetRowViewModel: Identifiable {
     private let account: Account
+    private let ticker: Ticker
     
     var id: String {
         account.currency
     }
     
-    init(account: Account) {
+    init(account: Account, ticker: Ticker) {
         self.account = account
+        self.ticker = ticker
     }
     
     let currentPrice: Double = 1000

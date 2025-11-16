@@ -17,13 +17,18 @@ struct MyAssetsView: View {
                 
                 if viewModel.assetRows.isEmpty {
                     ContentUnavailableView(
-                        "자산 목록을 불러올 수 없어요.",
-                        systemImage: "network.slash",
-                        description: Text("잠시 후 다시 시도해주세요.")
+                        "자산 목록이 없습니다.",
+                        systemImage: "bitcoinsign.circle.fill",
+                        description: Text("거래를 시작해보세요.")
                     )
                     .padding(.vertical)
                 } else {
                     assetList
+                }
+            }
+            .refreshable {
+                Task {
+                    await viewModel.fetch()
                 }
             }
             .ignoresSafeArea(edges: .top)
