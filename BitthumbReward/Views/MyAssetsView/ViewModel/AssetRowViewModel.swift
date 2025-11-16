@@ -12,7 +12,11 @@ struct AssetRowViewModel: Identifiable {
     private let ticker: Ticker
     
     var id: String {
-        account.currency
+        market
+    }
+    
+    var market: String {
+        ticker.market
     }
     
     init(account: Account, ticker: Ticker) {

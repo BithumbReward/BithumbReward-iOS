@@ -11,7 +11,9 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Tab("내 자산", systemImage: "wallet.bifold.fill") {
-                MyAssetsView()
+                NavigationStack {
+                    MyAssetsView()
+                }
             }
             
             Tab("주문", systemImage: "chart.line.uptrend.xyaxis") {
@@ -19,8 +21,10 @@ struct ContentView: View {
             }
             
             Tab("기록", systemImage: "clock.fill") {
-                HistoryView { coin in
-                    TradeHistoryView(coin: coin)
+                NavigationStack {
+                    HistoryView { coin in
+                        TradeHistoryView(coin: coin)
+                    }
                 }
             }
         }

@@ -16,43 +16,6 @@ struct TradeHistoryView: View {
     
     var body: some View {
         VStack {
-            Button("조회") {
-                Task {
-                    do {
-                        orders = try await client.fetchOrders(
-                            .init(
-                                market: "KRW-BTC",
-                                uuids: [],
-                                state: "done",
-                                states: []
-                            )
-                        )
-                        print(orders)
-                    } catch {
-                        print(error)
-                    }
-                }
-            }
-            
-            Button("주문") {
-                Task {
-                    do {
-                        let order = try await client.order(
-                            .init(
-                                market: "KRW-BTC",
-                                side: "bid",
-                                volume: 0,
-                                price: 5000,
-                                orderType: "price"
-                            )
-                        )
-                        orders.insert(order, at: 0)
-                    } catch {
-                        print(error)
-                    }
-                }
-            }
-            
             if orders.isEmpty {
                 ContentUnavailableView(
                     "주문 내역이 없습니다",
@@ -61,13 +24,23 @@ struct TradeHistoryView: View {
                 )
             } else {
                 List(orders) { order in
-                    HStack {
-                        Text(order.uuid)
-                        Text(order.createdAt, format: .dateTime)
-                    }
                     OrderView(order: order)
-                        .frame(height: .infinity)
                 }
+            }
+        }
+        .navigationTitle(coin + " 주문 내역")
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            do {
+                orders = try await client.fetchOrders(
+                    .init(
+                        market: coin,
+                        state: "done"
+                    )
+                )
+                print(orders)
+            } catch {
+                print(error)
             }
         }
     }
@@ -76,19 +49,56 @@ struct TradeHistoryView: View {
 struct OrderView: View {
     let order: Order
     
-    var dict: [(String, Any)] {
-        (try? order.toDictionary()
-            .map {
-            ($0.key, $0.value)
-        }) ?? []
+    var orderTitle: String {
+        order.side.title + " " + order.ordType.title
     }
     
     var body: some View {
-        List(dict, id: \.0) { key, value in
-            HStack {
-                Text(key)
+        VStack(spacing: 8) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(orderTitle)
+                            .fontWeight(.medium)
+                            .foregroundStyle(order.ordType == .price ? .red : .blue)
+                        Text(order.market.replacingOccurrences(of: "-", with: " / "))
+                            .font(.footnote)
+                    }
+                    Text(order.createdAt, format: .dateTime)
+                        .foregroundStyle(.secondary)
+                        .font(.footnote)
+                }
+                Spacer()
                 
-                Text(value as? String ?? "\(value)")
+                Text(order.state.title)
+                    .foregroundStyle(.secondary)
+                    .font(.footnote)
+                
+            }.padding(.vertical, 8)
+            
+            HStack {
+                Text("주문금액")
+                Spacer()
+                Text(order.price + "원")
+            }
+            
+            HStack {
+                Text("주문가격")
+                Spacer()
+                Text("-")
+            }
+            
+            HStack {
+                Text("주문수량")
+                Spacer()
+                Text("-")
+            }
+            
+            HStack {
+                Text("체결수량")
+                Spacer()
+                Text(order.executedVolume)
+                Text(order.market.components(separatedBy: "-")[1])
             }
         }
     }
@@ -98,4 +108,5 @@ struct OrderView: View {
     OrderView(
         order: .preview
     )
+    .padding()
 }
