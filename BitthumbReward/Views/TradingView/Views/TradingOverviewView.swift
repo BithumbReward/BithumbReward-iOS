@@ -30,7 +30,7 @@ struct TradingOverviewView: View {
                     .foregroundStyle(.secondary)
             }
             
-            Text("\(ovViewModel.tradePrice)")
+            Text(ovViewModel.formattedTradePrice)
                 .font(.system(size: 48))
                 .fontWeight(.medium)
             

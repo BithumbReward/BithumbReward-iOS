@@ -24,6 +24,11 @@ struct CoinRowViewModel: Identifiable {
     var id: String { ticker }
     
     ///
+    var formattedTradePrice: String {
+        return tradePrice.formatted(.number.precision(.fractionLength(1)))
+    }
+    
+    ///
     var formattedChangeRate: String {
         let formatted = changeRate.formatted(.percent.precision(.fractionLength(2)))
         return (changeRate > 0.0 ? "+" : "-") + formatted
