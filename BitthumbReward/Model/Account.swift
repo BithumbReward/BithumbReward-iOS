@@ -9,7 +9,8 @@ import Foundation
 
 // MARK: - Account
 struct Account: Codable {
-    let currency, balance, locked, avgBuyPrice: String
+    let currency: String
+    let balance, locked, avgBuyPrice: String
     let avgBuyPriceModified: Bool
     let unitCurrency: String
 

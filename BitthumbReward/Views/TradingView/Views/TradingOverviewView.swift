@@ -9,16 +9,16 @@ import SwiftUI
 
 struct TradingOverviewView: View {
     var fullName: String
-    var overview: TradingOverviewViewModel
+    var ovViewModel: TradingOverviewViewModel
     
     let padding: CGFloat = 12
     
     init(
         _ fullName: String,
-        overview: TradingOverviewViewModel
+        ovViewModel: TradingOverviewViewModel
     ) {
         self.fullName = fullName
-        self.overview = overview
+        self.ovViewModel = ovViewModel
     }
     
     var body: some View {
@@ -26,25 +26,25 @@ struct TradingOverviewView: View {
             HStack {
                 Text(fullName)
                     .fontWeight(.bold)
-                Text("( \(overview.ticker) )")
+                Text("( \(ovViewModel.ticker) )")
                     .foregroundStyle(.secondary)
             }
             
-            Text(overview.formattedTradePrice)
+            Text(ovViewModel.formattedTradePrice)
                 .font(.system(size: 48))
                 .fontWeight(.medium)
             
             HStack {
                 box(
-                    "\(overview.highPrice.formatted())",
+                    "\(ovViewModel.highPrice.formatted())",
                     text: "52주 최고가"
                 )
                 box(
-                    "\(overview.lowPrice.formatted())",
+                    "\(ovViewModel.lowPrice.formatted())",
                     text: "52주 최저가"
                 )
                 box(
-                    overview.formattedChangeRate,
+                    ovViewModel.formattedChangeRate,
                     text: "변동률",
                     highlighting: true
                 )
@@ -61,7 +61,7 @@ struct TradingOverviewView: View {
             Text(price)
                 .if(highlighting) { content in
                     content
-                        .foregroundStyle(overview.changeRate > 0.0 ? Color.red : Color.blue)
+                        .foregroundStyle(ovViewModel.changeRate > 0.0 ? Color.red : Color.blue)
                 }
                 .fontWeight(.medium)
                 .lineLimit(1)
@@ -84,7 +84,7 @@ struct TradingOverviewView: View {
 #Preview {
     TradingOverviewView(
         "Bitcoin",
-        overview: .init(
+        ovViewModel: .init(
             ticker: "BTC-KRW",
             tradePrice: 149322000,
             highPrice: 198323000,
