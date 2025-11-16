@@ -27,7 +27,7 @@ struct TradingView: View {
                         coin.fullName,
                         ovViewModel: .mock
                     )
-                    .shimmering(active: true)
+                    .shimmering(active: true, redacted: .placeholder)
                 }
             }
             .padding(.top)
@@ -61,12 +61,11 @@ struct TradingView: View {
             }
             .padding(10)
             
-            Spacer()
+            Spacer(minLength: 10)
             
             Button {
                 
             } label: {
-                // 버튼 타입에 따라 UI 달리하기
                 Text(vm.tradeType == .buy ? "매수하기" : "매도하기")
                     .font(.headline)
                     .fontWeight(.bold)
@@ -77,6 +76,8 @@ struct TradingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.horizontal)
             }
+            .padding(.bottom)
+            .keyboardAdaptive(offset: 75)
         }
         .navigationTitle("코인 주문") // 버튼 타입에 따라 제목 달리하기
         .navigationBarTitleDisplayMode(.inline)
@@ -88,8 +89,12 @@ struct TradingView: View {
             }
         }
         .background(.bithumbBackground)
-        .onAppear {
-            // do something...
+        .task {
+            do {
+                try await trViewModel.fetchCurrentTradePrice(on: coin.ticker)
+            } catch {
+                // ...
+            }
         }
     }
 }

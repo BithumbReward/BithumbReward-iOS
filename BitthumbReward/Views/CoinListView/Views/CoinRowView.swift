@@ -22,7 +22,7 @@ struct CoinRowView: View {
             Spacer()
             
             VStack(alignment: .trailing) {
-                Text("\(viewModel.tradePrice)")
+                Text(viewModel.formattedTradePrice)
                 Text(viewModel.formattedChangeRate)
                     .foregroundStyle(viewModel.changeRate > 0.0 ? Color.red : Color.blue)
             }
