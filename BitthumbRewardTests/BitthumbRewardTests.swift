@@ -6,6 +6,7 @@
 //
 
 import Testing
+import Foundation
 @testable import BitthumbReward
 
 struct BitthumbRewardTests {
@@ -24,5 +25,31 @@ struct BitthumbRewardTests {
         let account = try await client.account()
         
         #expect(account.isEmpty == true)
+    }
+    
+    @Test func encode_datetime() async throws {
+        
+        let json = Data(
+        """
+        {
+           "created_at": "2025-11-16T18:11:27+09:00"
+        }
+        """.utf8)
+        
+        do {
+            var decoder = JSONDecoder()
+//            decoder.dateDecodingStrategy = .iso8601
+            let sample = try decoder.decode(Sample.self, from: json)
+            #expect(true)
+        } catch {
+            print(error)
+            assertionFailure(error.localizedDescription)
+        }
+        
+        
+    }
+    
+    struct Sample: Codable {
+        let created_at: Date
     }
 }
