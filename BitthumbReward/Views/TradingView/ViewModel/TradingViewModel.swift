@@ -13,9 +13,6 @@ final class TradingViewModel {
     ///
     var overview: TradingOverviewViewModel?
     ///
-    var showWarningAlert: Bool = false
-    
-    ///
     var tradeType: BuyAndSellButton.`Type` = .buy
     ///
     var tradeAmount: String = ""
