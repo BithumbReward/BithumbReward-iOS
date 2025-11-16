@@ -47,6 +47,7 @@ struct KeyboardAdaptive: ViewModifier {
 
 extension View {
     
+    ///
     func keyboardAdaptive(offset: CGFloat? = nil) -> some View {
         ModifiedContent(content: self, modifier: KeyboardAdaptive(offset: offset))
     }
