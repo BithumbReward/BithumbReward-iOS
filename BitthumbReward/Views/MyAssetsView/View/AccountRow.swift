@@ -2,6 +2,12 @@
 //  AccountRow.swift
 //  BitthumbReward
 //
+//  Created by kangho on 11/16/25.
+//
+//
+//  AccountRow.swift
+//  BitthumbReward
+//
 //  Created by kangho on 11/14/25.
 //
 

@@ -1,5 +1,5 @@
 //
-//  CoinListView.swift
+//  MarketListView.swift
 //  BitthumbReward
 //
 //  Created by 김건우 on 11/14/25.
@@ -7,15 +7,14 @@
 
 import SwiftUI
 
-struct CoinListView: View {
-    @Environment(CoinListViewModel.self) var clViewModel
+struct MarketListView: View {
+    @State private var viewModel = MarketListViewModel()
     
     var body: some View {
-        @Bindable var vm = clViewModel
         NavigationStack {
             Group {
-                if !clViewModel.listOfMarkets.isEmpty {
-                    listOfCoinsView
+                if !viewModel.listOfMarkets.isEmpty {
+                    contentListView
                 } else {
                     contentUnavailableView
                 }
@@ -25,14 +24,14 @@ struct CoinListView: View {
         }
         .task {
             do {
-                try await clViewModel.fetchAvailableMarkets()
+                try await viewModel.fetchAvailableMarkets()
             } catch {
-                clViewModel.showWarningAlert = true
+                viewModel.showWarningAlert = true
             }
         }
         .alert(
             "코인 목록 불러오기 실패",
-            isPresented: $vm.showWarningAlert
+            isPresented: $viewModel.showWarningAlert
         ) {
             Button("확인") { }
         } message: {
@@ -41,12 +40,12 @@ struct CoinListView: View {
         
     }
     
-    private var listOfCoinsView: some View {
-        List(clViewModel.listOfMarkets) { coin in
+    private var contentListView: some View {
+        List(viewModel.listOfMarkets) { market in
             NavigationLink {
-                TradingView(coin: coin)
+                TradingView(market: market)
             } label: {
-                CoinRowView(viewModel: coin)
+                MarketRowView(market: market)
             }
         }
         .listRowBackground(Color.white)
@@ -64,18 +63,18 @@ struct CoinListView: View {
 
 #Preview {
     NavigationStack {
-        CoinListView()
-            .environment(CoinListViewModel())
+        MarketListView()
+            .environment(MarketListViewModel())
     }
 }
 
 #Preview {
     NavigationStack {
-        CoinListView()
+        MarketListView()
             .environment(
-                CoinListViewModel(
+                MarketListViewModel(
                     listOfMarkets: [
-                        CoinRowViewModel(
+                        MarketRowViewModel(
                             ticker: "BTC",
                             fullName: "Bitcoin",
                             tradePrice: 149_865_000,
@@ -83,7 +82,7 @@ struct CoinListView: View {
                             lowPrice: 147_200_000,
                             changeRate: 0.0285555
                         ),
-                        CoinRowViewModel(
+                        MarketRowViewModel(
                             ticker: "DOG",
                             fullName: "Dogecoin",
                             tradePrice: 67_445_344,
@@ -91,7 +90,7 @@ struct CoinListView: View {
                             lowPrice: 65_900_000,
                             changeRate: 0.123525
                         ),
-                        CoinRowViewModel(
+                        MarketRowViewModel(
                             ticker: "ETH",
                             fullName: "Ethereum",
                             tradePrice: 53_424_444,

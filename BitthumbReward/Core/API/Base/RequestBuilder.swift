@@ -27,16 +27,31 @@ struct RequestBuilder {
         if let body = endpoint.body {
             request.httpBody = try JSONEncoder().encode(body)
             request.setValue("application/json",
-                                         forHTTPHeaderField: "Content-Type")
+                             forHTTPHeaderField: "Content-Type")
         }
         
-        let queryString = urlComponents.percentEncodedQuery ?? ""
-        
         if endpoint.needAuth {
-            let token = try JWT.generate(accessKey: AppConfiguration.accessKey, secretKey: AppConfiguration.secretKey, query: queryString)
+            let encodedQueries: String
+            if let body = endpoint.body, let param = try? body.toDictionary() {
+                encodedQueries = queryString(from: param)
+            } else {
+                encodedQueries = urlComponents.percentEncodedQuery ?? ""
+            }
+            let token = try JWT.generate(accessKey: AppConfiguration.accessKey, secretKey: AppConfiguration.secretKey, query: encodedQueries)
+            
+            
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
         return request
+    }
+    
+    private func queryString(from parameters: [String: Any]) -> String {
+        var components = URLComponents()
+        components.queryItems = parameters
+            .map { key, value in
+                URLQueryItem(name: key, value: "\(value)")
+            }
+        return components.percentEncodedQuery ?? ""
     }
 }

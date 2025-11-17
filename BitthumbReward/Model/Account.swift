@@ -29,12 +29,3 @@ extension Account: Identifiable {
         currency
     }
 }
-//
-//extension Array where Element == Account {
-//    static let previews: [Account] = [
-//        .init(currency: "BTC", balance: "0.00000000", locked: "0.00000000", avgBuyPrice: "0.00000000", avgBuyPriceModified: false, unitCurrency: "BTC"),
-//        .init(currency: "ETH", balance: "0.00000000", locked: "0.00000000", avgBuyPrice: "0.00000000", avgBuyPriceModified: false, unitCurrency: "ETH"),
-//        .init(currency: "BNB", balance: "0.00000000", locked: "0.00000000", avgBuyPrice: "0.00000000", avgBuyPriceModified: false, unitCurrency: "BNB"),
-//        .init(currency: "USDT", balance: "0.00000000", locked: "0.00000000", avgBuyPrice: "0.00000000", avgBuyPriceModified: false, unitCurrency: "USDT"),
-//    ]
-//}

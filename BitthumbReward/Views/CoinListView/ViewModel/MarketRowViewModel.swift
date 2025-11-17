@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CoinRowViewModel: Identifiable {
+struct MarketRowViewModel: Identifiable {
     ///
     let ticker: String
     ///
@@ -35,5 +35,5 @@ struct CoinRowViewModel: Identifiable {
     }
 }
 
-extension CoinRowViewModel: Hashable {
+extension MarketRowViewModel: Hashable {
 }

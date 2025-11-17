@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MyAssetsView: View {
-    @Environment(MyAssetsViewModel.self) var viewModel
+    @State private var viewModel: MyAssetsViewModel = MyAssetsViewModel()
     
     var body: some View {
         Group {
@@ -90,4 +90,3 @@ extension MyAssetsView {
 #Preview {
     MyAssetsView()
 }
-

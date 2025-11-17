@@ -66,6 +66,11 @@ extension BithumbClient {
     private func send<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         let builder = RequestBuilder()
         let request = try builder.build(endpoint)
-        return try await session.send(request) { try JSONDecoder().decode(T.self, from: $0) }
+        
+        return try await session.send(request) {
+            var decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode(T.self, from: $0)
+        }
     }
 }

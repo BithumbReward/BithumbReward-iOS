@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HistoryView<Content: View>: View {
-    @Environment(CoinListViewModel.self) var clViewModel
+    @State private var viewModel = MarketListViewModel()
     
     var content: (String) -> Content
     
@@ -17,10 +17,10 @@ struct HistoryView<Content: View>: View {
     }
     
     var body: some View {
-        @Bindable var vm = clViewModel
+        @Bindable var vm = viewModel
         NavigationStack {
             Group {
-                if !clViewModel.listOfMarkets.isEmpty {
+                if !viewModel.listOfMarkets.isEmpty {
                     listOfCoinsView
                 } else {
                     contentUnavailableView
@@ -31,9 +31,9 @@ struct HistoryView<Content: View>: View {
         }
         .task {
             do {
-                try await clViewModel.fetchAvailableMarkets()
+                try await viewModel.fetchAvailableMarkets()
             } catch {
-                clViewModel.showWarningAlert = true
+                viewModel.showWarningAlert = true
             }
         }
         .alert(
@@ -47,11 +47,11 @@ struct HistoryView<Content: View>: View {
     }
     
     private var listOfCoinsView: some View {
-        List(clViewModel.listOfMarkets) { coin in
+        List(viewModel.listOfMarkets) { market in
             NavigationLink {
-                content("BTC")
+                content("KRW-BTC")
             } label: {
-                CoinRowView(viewModel: coin)
+                MarketRowView(market: market)
             }
         }
         .listRowBackground(Color.white)
